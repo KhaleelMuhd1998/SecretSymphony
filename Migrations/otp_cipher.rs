@@ -23,3 +23,7 @@ fn main() {
     
     // Step 2: Generate a random key of the same length as the message
     let key = generate_key(message_bytes.len()); 
+
+    // Step 3: Encrypt the message using XOR
+    let ciphertext = xor_bytes(message_bytes, &key);
+    println!("Ciphertext: {:?}", ciphertext);  // 🛑 Looks like gibberish because it's encrypted!
