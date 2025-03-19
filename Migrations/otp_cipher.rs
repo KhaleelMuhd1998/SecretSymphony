@@ -22,4 +22,4 @@ fn main() {
     let message_bytes = message.as_bytes();  // Convert it into a series of bytes
     
     // Step 2: Generate a random key of the same length as the message
-    let key = generate_key(message_bytes.len());
+    let key = generate_key(message_bytes.len()); 
