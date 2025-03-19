@@ -1,0 +1,10 @@
+use rand::Rng;  // Import random number generator
+use std::str;
+
+/// Generates a random key of the same length as the message.
+/// Think of this as creating a "one-time use password" for encryption.
+fn generate_key(length: usize) -> Vec<u8> {
+    let mut rng = rand::thread_rng();  // Initialize a random number generator
+    (0..length).map(|_| rng.gen::<u8>()).collect()  //  Generate random bytes equal to the message length
+}
+
