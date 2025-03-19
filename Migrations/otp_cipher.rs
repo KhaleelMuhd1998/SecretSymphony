@@ -26,4 +26,10 @@ fn main() {
 
     // Step 3: Encrypt the message using XOR
     let ciphertext = xor_bytes(message_bytes, &key);
-    println!("Ciphertext: {:?}", ciphertext);  // 🛑 Looks like gibberish because it's encrypted!
+    println!("Ciphertext: {:?}", ciphertext);  // Looks like gibberish because it's encrypted!
+
+    // Step 4: Decrypt the message (XOR the ciphertext with the same key)
+    let decrypted_bytes = xor_bytes(&ciphertext, &key);
+    let decrypted_message = str::from_utf8(&decrypted_bytes).unwrap();  // Convert bytes back to text
+    println!("Decrypted Message: {}", decrypted_message);  // Should match the original message!
+}
