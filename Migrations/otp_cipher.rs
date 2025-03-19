@@ -15,3 +15,11 @@ fn xor_bytes(data: &[u8], key: &[u8]) -> Vec<u8> {
         .map(|(&d, &k)| d ^ k)              // Apply XOR operation on each byte pair
         .collect()                    // Collect the XORd bytes into a vector
 }
+
+fn main() {
+    // Step 1: Convert the message to bytes
+    let message = "This is a secret message.";  // The original text message
+    let message_bytes = message.as_bytes();  // Convert it into a series of bytes
+    
+    // Step 2: Generate a random key of the same length as the message
+    let key = generate_key(message_bytes.len());
