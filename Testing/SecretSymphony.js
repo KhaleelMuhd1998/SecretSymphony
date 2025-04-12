@@ -69,6 +69,7 @@ function generateSHA256(buffer) {
  * @property {string} inputFilePath - Path to the file to encrypt
  * @property {string} pin - PIN used for encryption
  * @property {string} [outputDir] - Output directory path (optional)
+ * @property {Object} [customData] - Optional custom metadata fields (developer-defined)
  *
  * @typedef {Object} EncryptFileResultSS
  * @property {boolean} status - Operation status
@@ -77,7 +78,7 @@ function generateSHA256(buffer) {
  * @property {string} keyFilePath - Path to the generated .sse2 file
  * @property {string} [error] - Error message (if failed)
 */
-function encryptFileSS({ inputFilePath, pin = "", embedPin = false, outputDir = "" }) {
+function encryptFileSS({ inputFilePath, pin, outputDir = "", customData = {} }) {
     if (!fs.existsSync(inputFilePath)) {
         return {
             status: false,
@@ -92,8 +93,18 @@ function encryptFileSS({ inputFilePath, pin = "", embedPin = false, outputDir = 
         };
     }
 
-    if (outputDir && !fs.existsSync(outputDir)) {
-        fs.mkdirSync(outputDir, { recursive: true });
+    if (outputDir) {
+        try {
+            if (!fs.existsSync(outputDir)) {
+                fs.mkdirSync(outputDir, { recursive: true });
+            }
+            fs.accessSync(outputDir, fs.constants.W_OK);
+        } catch (err) {
+            return {
+                status: false,
+                error: 'Error: Output directory is not writable or accessible.'
+            };
+        }
     }
 
     const shiftValues = getUserShiftValues(pin);
@@ -116,10 +127,9 @@ function encryptFileSS({ inputFilePath, pin = "", embedPin = false, outputDir = 
     const metadata = {
         default: {
             hash,
-            format: path.extname(inputFilePath).substring(1),
-            ...(embedPin && { pin })
+            format: path.extname(inputFilePath).substring(1)
         },
-        custom: {}
+        custom: customData
     };
     fs.writeFileSync(metadataFilePath, JSON.stringify(metadata, null, 2));
 
@@ -139,17 +149,32 @@ function encryptFileSS({ inputFilePath, pin = "", embedPin = false, outputDir = 
  * @property {string} keyFilePath - Path to the .sse2 scrambled key
  * @property {string} pin - PIN used to reverse key scrambling
  * @property {string} [outputDir] - Output directory path (optional)
+ * @property {boolean} [deleteEncryptedFiles] - If true, deletes .sse0, .sse1, and .sse2 after successful decryption
  *
  * @typedef {Object} DecryptFileResultSS
  * @property {boolean} status - Operation status
- * @property {string} [decryptedFilePath] - Path to the restored .png file (if successful)
+ * @property {string} [decryptedFilePath] - Path to the restored output file (if successful)
+ * @property {Object} [custom] - Custom metadata fields from the encrypted file (if any)
  * @property {string} [error] - Error message (if failed)
  */
-function decryptFileSS({ metadataFilePath, encryptedFilePath, keyFilePath, pin, outputDir = "" }) {
+/** @type {DecryptFileResultSS} */
+function decryptFileSS({ metadataFilePath, encryptedFilePath, keyFilePath, pin, outputDir = "", deleteEncryptedFiles = false }) {
+    if (outputDir) {
+        try {
+            if (!fs.existsSync(outputDir)) {
+                fs.mkdirSync(outputDir, { recursive: true });
+            }
+            fs.accessSync(outputDir, fs.constants.W_OK);
+        } catch (err) {
+            return {
+                status: false,
+                error: 'Error: Output directory is not writable or accessible.'
+            };
+        }
+    }
+
     const metadata = JSON.parse(fs.readFileSync(metadataFilePath, 'utf-8'));
-    const embeddedPin = metadata.default.pin;
-    const effectivePin = embeddedPin || pin;
-    const shiftValues = getUserShiftValues(effectivePin);
+    const shiftValues = getUserShiftValues(pin);
     const expectedHash = metadata.default.hash;
 
     const encryptedBase64 = fs.readFileSync(encryptedFilePath, 'utf-8');
@@ -172,9 +197,20 @@ function decryptFileSS({ metadataFilePath, encryptedFilePath, keyFilePath, pin, 
     const decryptedFilePath = path.join(outputDir, `${baseName}_ss.${format}`);
     fs.writeFileSync(decryptedFilePath, decodedBuffer);
 
+    if (deleteEncryptedFiles) {
+        try {
+            fs.unlinkSync(metadataFilePath);
+            fs.unlinkSync(encryptedFilePath);
+            fs.unlinkSync(keyFilePath);
+        } catch (err) {
+              console.error('Error: Unable to delete encrypted files.');
+        }
+    }
+
     return {
         status: true,
-        decryptedFilePath
+        decryptedFilePath,
+        custom: metadata.custom
     };
 }
 
