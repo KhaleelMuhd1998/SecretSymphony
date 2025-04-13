@@ -1,0 +1,13 @@
+{
+  "secretsymphony": {
+    "version": "1.0.0",
+    "platform": "JavaScript"
+  },
+  "default": {
+    "hash": "42f300c3f452bebc536b27299308b5686b5c1620dc559cf9561c51c14b4283a5",
+    "format": "png"
+  },
+  "custom": {
+    "Name": "Secret Symphony"
+  }
+}
