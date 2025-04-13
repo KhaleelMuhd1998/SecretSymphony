@@ -1,0 +1,15 @@
+{
+    "name": "secretsymphony",
+    "version": "1.0.0",  
+    "type": "module",
+    "contributors": [
+        {
+          "name": "Khaleel M",
+          "url": "https://github.com/KhaleelMuhd1998"
+        },
+        {
+          "name": "Surmai Adhikari",
+          "url": "https://github.com/SAAS-s"
+        }
+    ]
+}
