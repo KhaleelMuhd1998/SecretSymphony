@@ -5,7 +5,7 @@ import hashlib
 from pathlib import Path
 from datetime import datetime
 
-SECRETSYMPHONY_VERSION = "1.0.0"
+SECRETSYMPHONY_VERSION = "0.0.1"
 SECRETSYMPHONY_PLATFORM = "Python"
 
 EPOCH_OFFSET = 946684800  # Jan 1, 2000 UTC

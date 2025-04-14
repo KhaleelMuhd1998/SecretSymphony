@@ -1,7 +1,7 @@
 /**
  * Project Name: Secret Symphony
  * Description: Security library for encrypting/decrypting Base64 data.
- * Version: 1.0.0
+ * Version: 0.0.1
  * Contributors:
  * - Khaleel M <https://www.github.com/KhaleelMuhd1998>
  * - Surmai Adhikari <https://www.github.com/SAAS-s>

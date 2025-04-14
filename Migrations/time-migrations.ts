@@ -1,4 +1,4 @@
-const SecretSymphonyVersion = "1.0.0";
+const SecretSymphonyVersion = "0.0.1";
 const SecretSymphonyPlatform = "TypeScript";
 
 function getCurrentCustomTime(): bigint {

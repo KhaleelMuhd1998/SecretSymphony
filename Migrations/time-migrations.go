@@ -17,7 +17,7 @@ import (
 )
 
 const (
-	SecretSymphonyVersion  = "1.0.0"
+	SecretSymphonyVersion  = "0.0.1"
 	SecretSymphonyPlatform = "Go"
 	EpochOffset            = 946684800 // Jan 1, 2000 UTC
 )
