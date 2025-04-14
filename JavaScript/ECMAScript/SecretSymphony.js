@@ -15,7 +15,7 @@ import path from 'path';
 import crypto from 'crypto';
 
 // Details of Secret Symphony. Will be added to metadata file.
-const secretsymphonyversion = '1.0.0';
+const secretsymphonyversion = '0.0.1';
 const secretsymphonyplatform = 'JavaScript';
 
 // Returns the current time in seconds since Jan 1, 2000
